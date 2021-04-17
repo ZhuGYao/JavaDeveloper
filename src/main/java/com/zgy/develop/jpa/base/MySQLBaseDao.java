@@ -2,8 +2,8 @@ package com.zgy.develop.jpa.base;
 
 import com.zgy.develop.annotation.db.Column;
 import com.zgy.develop.annotation.db.Table;
-import com.zgy.develop.common.enums.Marks;
-import com.zgy.develop.common.enums.MySQLKeyword;
+import com.zgy.develop.common.enums.MarksEnum;
+import com.zgy.develop.common.enums.MySQLKeywordEnum;
 import com.zgy.develop.pool.CustomDBPool;
 import com.zgy.develop.pool.DBConnection;
 
@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -44,10 +43,10 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
 
         StringBuilder sql = new StringBuilder();
 
-        sql.append(MySQLKeyword.INSERT.value)
-                .append(MySQLKeyword.INTO.value)
+        sql.append(MySQLKeywordEnum.INSERT.value)
+                .append(MySQLKeywordEnum.INTO.value)
                 .append(table_name)
-                .append(Marks.LEFT_BRACKET.value);
+                .append(MarksEnum.LEFT_BRACKET.value);
 
         List<String> columnList = new ArrayList<>();
         List<String> valueList = new ArrayList<>();
@@ -65,19 +64,19 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
                     valueList.add(null);
                     continue;
                 }
-                valueList.add(Marks.QUOTATION.value + o.toString() + Marks.QUOTATION.value);
+                valueList.add(MarksEnum.QUOTATION.value + o.toString() + MarksEnum.QUOTATION.value);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        sql.append(String.join(Marks.COMMA.value, columnList))
-                .append(Marks.RIGHT_BRACKET.value)
-                .append(MySQLKeyword.VALUES.value)
-                .append(Marks.LEFT_BRACKET.value)
-                .append(String.join(Marks.COMMA.value, valueList))
-                .append(Marks.RIGHT_BRACKET.value)
-                .append(Marks.SEMICOLON.value);
+        sql.append(String.join(MarksEnum.COMMA.value, columnList))
+                .append(MarksEnum.RIGHT_BRACKET.value)
+                .append(MySQLKeywordEnum.VALUES.value)
+                .append(MarksEnum.LEFT_BRACKET.value)
+                .append(String.join(MarksEnum.COMMA.value, valueList))
+                .append(MarksEnum.RIGHT_BRACKET.value)
+                .append(MarksEnum.SEMICOLON.value);
 
         System.out.println(sql.toString());
         Connection connection = customDBPool.getConnection();

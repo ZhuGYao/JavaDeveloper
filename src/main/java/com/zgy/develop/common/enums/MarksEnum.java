@@ -5,7 +5,7 @@ package com.zgy.develop.common.enums;
  * @data 2021/4/16 17:02
  */
 
-public enum Marks {
+public enum MarksEnum {
 
     SPACE(" "),
     COMMA(" , "),
@@ -17,7 +17,7 @@ public enum Marks {
 
     public final String value;
 
-    Marks(String value) {
+    MarksEnum(String value) {
         this.value = value;
     }
 }

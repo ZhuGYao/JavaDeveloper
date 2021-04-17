@@ -5,7 +5,7 @@ package com.zgy.develop.common.enums;
  * @data 2021/4/16 16:57
  */
 
-public enum MySQLKeyword {
+public enum MySQLKeywordEnum {
     SELECT(" SELECT "),
     WHERE(" WHERE "),
     OR(" OR "),
@@ -19,7 +19,7 @@ public enum MySQLKeyword {
 
     public final String value;
 
-    MySQLKeyword(String value) {
+    MySQLKeywordEnum(String value) {
         this.value = value;
     }
 }
