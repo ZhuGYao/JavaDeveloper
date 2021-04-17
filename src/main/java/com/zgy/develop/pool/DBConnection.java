@@ -9,7 +9,7 @@ import java.sql.*;
 
 public class DBConnection {
 
-    private static String driver ="com.mysql.jdbc.Driver";
+    private static String driver ="com.mysql.cj.jdbc.Driver";
     private static String url ="jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false&socketTimeout=300000&connectTimeout=30000";
     private static String user = "root";
     private static String password ="root";
@@ -35,13 +35,25 @@ public class DBConnection {
      * @param connection
      * @param insertSql
      */
-    public static void executeInsert(Connection connection, String insertSql) {
+    public static int executeInsert(Connection connection, String insertSql) {
+        Statement statement = null;
+        int count = 0;
         try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(insertSql);
+            statement = connection.createStatement();
+            count = statement.executeUpdate(insertSql);
             statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
+        return count;
     }
 }

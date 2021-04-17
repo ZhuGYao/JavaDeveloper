@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  * @data 2021/4/15 14:36
  */
 
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
 

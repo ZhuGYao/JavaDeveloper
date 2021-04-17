@@ -1,4 +1,4 @@
-package com.xrt.sms.common.enums;
+package com.zgy.develop.common.enums;
 
 /**
  * @Desc: 是否 枚举
