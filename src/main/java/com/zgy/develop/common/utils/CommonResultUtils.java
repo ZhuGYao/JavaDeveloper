@@ -1,4 +1,4 @@
-package com.xrt.sms.common.utils;
+package com.zgy.develop.common.utils;
 
 
 import java.io.Serializable;

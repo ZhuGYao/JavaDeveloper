@@ -70,6 +70,8 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
             }
         }
 
+
+
         sql.append(String.join(MarksEnum.COMMA.value, columnList))
                 .append(MarksEnum.RIGHT_BRACKET.value)
                 .append(MySQLKeywordEnum.VALUES.value)
