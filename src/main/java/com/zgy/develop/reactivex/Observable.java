@@ -27,11 +27,31 @@ public class Observable<T> implements ObservableSource<T> {
         return new Observable<>(observableOnSubscribe);
     }
 
+    /**
+     * 映射转换
+     * @param func 转换函数
+     * @param <R>
+     * @return
+     */
     public <R> Observable<R> map(Function<T, R> func) {
-        return lift(new ExecuteMap<T, R>(func));
+        return lift(new ExecuteMap<>(func));
     }
 
+    /**
+     *
+     * @param execute
+     * @param <R>
+     * @return
+     */
     public <R> Observable<R> lift(Execute<R, T> execute) {
-        return new Observable<>(new ObservableLift<T, R>(observableOnSubscribe, execute));
+        return new Observable<>(new ObservableLift<>(observableOnSubscribe, execute));
+    }
+
+    public static <T> Observable<T> just(T ...t) {
+        return from(t);
+    }
+
+    public static <T> Observable<T> from(T[] array) {
+        return create(new ObservableArray<T>(array));
     }
 }
