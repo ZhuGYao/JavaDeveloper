@@ -5,5 +5,8 @@ package com.zgy.develop.rxjava;
  * @data 2021/4/20 11:28
  */
 
-public interface ICall {
+public interface ICall<T> {
+
+    void call(T t);
+
 }
