@@ -44,7 +44,7 @@ public class Observable<T> implements ObservableSource<T> {
      * @return
      */
     public <R> Observable<R> lift(Execute<R, T> execute) {
-        return new Observable<>(new ObservableLift<>(observableOnSubscribe, execute));
+        return create(new ObservableLift<>(observableOnSubscribe, execute));
     }
 
     public static <T> Observable<T> just(T ...t) {
