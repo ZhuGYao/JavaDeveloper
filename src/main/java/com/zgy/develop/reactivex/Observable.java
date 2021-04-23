@@ -34,7 +34,22 @@ public class Observable<T> implements ObservableSource<T> {
      * @return
      */
     public <R> Observable<R> map(Function<T, R> func) {
-        return lift(new ExecuteMap<>(func));
+
+        // 1
+        return new Observable<>(new ObservableOnSubscribe<R>() {
+            @Override
+            public void call(Observer<R> rObserver) {
+                Observable.this.subscribe(new Observer<T>() {
+                    @Override
+                    public void onNext(T value) {
+                        R call = func.call(value);
+                        rObserver.onNext(call);
+                    }
+                });
+            }
+        });
+        // 2
+//        return lift(new ExecuteMap<>(func));
     }
 
     /**
@@ -52,6 +67,20 @@ public class Observable<T> implements ObservableSource<T> {
     }
 
     public static <T> Observable<T> from(T[] array) {
-        return create(new ObservableArray<T>(array));
+
+        // 1
+        return new Observable<>(new ObservableOnSubscribe<T>() {
+            @Override
+            public void call(Observer<T> tObserver) {
+                for (T t : array) {
+                    tObserver.onNext(t);
+                }
+            }
+        });
+
+        // 2
+//        return create(new ObservableArray<T>(array));
     }
+
+
 }

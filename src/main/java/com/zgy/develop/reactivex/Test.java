@@ -45,6 +45,13 @@ public class Test {
 //                System.out.println(value + 22);
 //            }
 //        });
+//
+//        map.subscribe(new Observer<Integer>() {
+//            @Override
+//            public void onNext(Integer value) {
+//                System.out.println(value + 33);
+//            }
+//        });
 
         Observable.just(4, 5, 7, 8, 9).subscribe(new Observer<Integer>() {
                     @Override
