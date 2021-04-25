@@ -1,8 +1,8 @@
 package com.zgy.develop.juint;
 
-import com.zgy.develop.annotation.unit.MyAfter;
-import com.zgy.develop.annotation.unit.MyBefore;
-import com.zgy.develop.annotation.unit.MyTest;
+import com.zgy.develop.annotation.unit.After;
+import com.zgy.develop.annotation.unit.Before;
+import com.zgy.develop.annotation.unit.Test;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,22 +15,22 @@ import java.util.List;
 
 public class MyAnnotationTest {
 
-    @MyBefore
+    @Before
     public void before() {
         System.out.println("before");
     }
 
-    @MyTest
+    @Test
     public void test() {
         System.out.println("test");
     }
 
-    @MyTest
+    @Test
     public void test2() {
         System.out.println("test2");
     }
 
-    @MyAfter
+    @After
     public void after() {
         System.out.println("after");
     }
@@ -44,11 +44,11 @@ public class MyAnnotationTest {
         List<Method> afterList = new ArrayList<>();
         List<Method> testList = new ArrayList<>();
         for (Method m : methods) {
-            if (m.isAnnotationPresent(MyBefore.class)) {
+            if (m.isAnnotationPresent(Before.class)) {
                 beforeList.add(m);
-            } else if (m.isAnnotationPresent(MyAfter.class)) {
+            } else if (m.isAnnotationPresent(After.class)) {
                 afterList.add(m);
-            } else if (m.isAnnotationPresent(MyTest.class)) {
+            } else if (m.isAnnotationPresent(Test.class)) {
                 testList.add(m);
             }
         }
