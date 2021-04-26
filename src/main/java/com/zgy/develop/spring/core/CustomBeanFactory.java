@@ -1,11 +1,11 @@
-package com.zgy.develop.ioc;
+package com.zgy.develop.spring.ioc;
 
 /**
  * @author zgy
  * @data 2021/4/25 10:13
  */
 
-public interface BeanFactory {
+public interface CustomBeanFactory {
 
     /**
      * 根据名称获取bean
