@@ -1,4 +1,4 @@
-package com.zgy.develop.spring.ioc;
+package com.zgy.develop.spring.core;
 
 import com.zgy.develop.spring.annotation.CustomEnableAutoProxy;
 import com.zgy.develop.spring.annotation.CustomSpringBootApplication;

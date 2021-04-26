@@ -1,4 +1,4 @@
-package com.zgy.develop.spring.ioc;
+package com.zgy.develop.spring.core;
 
 /**
  * 基于注解

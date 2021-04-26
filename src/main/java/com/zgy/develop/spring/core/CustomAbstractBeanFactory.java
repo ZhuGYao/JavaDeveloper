@@ -1,5 +1,8 @@
-package com.zgy.develop.spring.ioc;
+package com.zgy.develop.spring.core;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,17 +14,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class CustomAbstractBeanFactory {
 
-    /**
-     * IOC容器
-     */
-    protected static Map<String, Object> iocMap = new ConcurrentHashMap<>();
+    // IOC容器
+    protected Map<String, Object> iocMap = new ConcurrentHashMap<>();
+
+    // class文件集合
+    protected List<String> classNames = new ArrayList<>();
 
     /**
      * 扫描并加载组件
      *
      * @param clazz
      */
-    protected abstract void scan(Class clazz, Properties properties);
+    protected abstract void scan(Class clazz, Properties properties) throws FileNotFoundException;
 
     /**
      * 装配组件

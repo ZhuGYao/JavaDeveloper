@@ -13,12 +13,12 @@ import java.util.Properties;
  * @data 2021/4/26 19:29
  */
 
-public class MyDispatchServlet extends HttpServlet {
+public class CustomDispatchServlet extends HttpServlet {
 
     private Class<?> clazz;
     private Properties properties;
 
-    public MyDispatchServlet(Class<?> clazz, Properties properties)
+    public CustomDispatchServlet(Class<?> clazz, Properties properties)
     {
         this.clazz = clazz;
         this.properties = properties;
