@@ -2,7 +2,9 @@ package com.zgy.develop.spring.core;
 
 import com.zgy.develop.spring.annotation.CustomAutowired;
 import com.zgy.develop.spring.annotation.CustomComponentScan;
+import com.zgy.develop.spring.aop.CustomAspectInstanceFactory;
 import com.zgy.develop.spring.common.enums.CommonEnums;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @data 2021/4/26 20:44
  */
 
+@Slf4j
 public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 
     // 获取IOC容器的功能
@@ -45,7 +48,7 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
      */
     private void load(String basePackage) throws FileNotFoundException {
         // 拼装包路径
-        String path = CommonEnums.SEPARATE.value + basePackage.replaceAll(".", CommonEnums.SEPARATE.value);
+        String path = CommonEnums.SEPARATE.value + basePackage.replaceAll(CommonEnums.SPOT.value, CommonEnums.SEPARATE.value);
         URL url = getClass().getResource(path);
         // 如果路径不存在，直接抛出异常
         if (url == null) {
@@ -55,19 +58,15 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
         for (File file : dir.listFiles()) {
             // 递归遍历文件夹
             if (file.isDirectory()) {
-                load(basePackage + "." + file.getName());
+                load(basePackage + CommonEnums.SPOT.value + file.getName());
             }
             // 判断是否是class文件
-            if (!file.getName().endsWith(".class")) {
+            if (!file.getName().endsWith(CommonEnums.CLASS_SUFFIX.value)) {
                 continue;
             }
             // 加入集合
-            classNames.add(basePackage + "." + file.getName().replace(".class", ""));
+            classNames.add(basePackage + CommonEnums.SPOT.value + file.getName().replace(CommonEnums.CLASS_SUFFIX.value, ""));
         }
-    }
-
-    private void loadComponent(String classPath, boolean isWeb) {
-
     }
 
     @Override
@@ -80,12 +79,33 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 
     }
 
+    private void GenerationProxy(String key, Object bean)
+    {
+        Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
+        Field[] fields = bean.getClass().getDeclaredFields();
+        try
+        {
+            // 对象的属性赋给代理对象
+            for (Field f : fields)
+            {
+                f.setAccessible(true);
+                Field temp = bean.getClass().getDeclaredField(f.getName());
+                temp.setAccessible(true);
+                f.set(proxy, temp.get(bean));
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        proxyMap.put(key, proxy);
+    }
+
     protected void autowiredProxy() {
-        for (Object o : iocMap.values()) {
-            Field[] fields = o.getClass().getDeclaredFields();
+        for (Object bean : iocMap.values()) {
+            Field[] fields = bean.getClass().getDeclaredFields();
             for (Field f : fields) {
                 if (f.isAnnotationPresent(CustomAutowired.class)) {
-                    autowiredProxy(f, o);
+                    autowiredProxy(f, bean);
                 }
             }
         }
@@ -93,7 +113,6 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 
     private void autowiredProxy(Field f, Object bean) {
         Class<?> clazz = f.getType();
-        System.out.println(this.proxyMap);
 
         String name = null;
         for (String key : iocMap.keySet()) {

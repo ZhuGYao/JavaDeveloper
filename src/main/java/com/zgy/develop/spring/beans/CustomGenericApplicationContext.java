@@ -2,7 +2,9 @@ package com.zgy.develop.spring.core;
 
 import com.zgy.develop.spring.annotation.CustomEnableAutoProxy;
 import com.zgy.develop.spring.annotation.CustomSpringBootApplication;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -11,6 +13,7 @@ import java.util.Properties;
  * @data 2021/4/26 20:54
  */
 
+@Slf4j
 public class CustomGenericApplicationContext extends CustomActionApplicationContext implements CustomApplicationContext {
 
     /**
@@ -18,10 +21,11 @@ public class CustomGenericApplicationContext extends CustomActionApplicationCont
      *
      * @param clazz
      */
-    protected void loadApplicationContext(Class<?> clazz, Properties properties) {
+    protected void loadApplicationContext(Class<?> clazz, Properties properties) throws FileNotFoundException {
         // 检验配置类
         if (!validateConfig(clazz)) {
-            System.err.println(clazz.getName() + "不是一个Spring配置类");
+            log.error("{}不是一个Spring配置类", clazz.getName());
+
             return;
         }
 
