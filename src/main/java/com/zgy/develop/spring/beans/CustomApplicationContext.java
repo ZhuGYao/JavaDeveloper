@@ -1,4 +1,4 @@
-package com.zgy.develop.spring.core;
+package com.zgy.develop.spring.beans;
 
 import java.util.Map;
 

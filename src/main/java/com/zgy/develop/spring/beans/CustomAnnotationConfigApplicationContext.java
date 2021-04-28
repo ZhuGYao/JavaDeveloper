@@ -1,4 +1,4 @@
-package com.zgy.develop.spring.core;
+package com.zgy.develop.spring.beans;
 
 /**
  * 基于注解

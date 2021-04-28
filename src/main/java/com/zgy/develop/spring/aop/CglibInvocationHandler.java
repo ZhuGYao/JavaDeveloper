@@ -1,19 +1,16 @@
-package com.lsm1998.spring.aop.aspectj;
+package com.zgy.develop.spring.aop;
 
-import com.lsm1998.spring.aop.annotation.MyAfter;
-import com.lsm1998.spring.aop.annotation.MyAfterThrowing;
-import com.lsm1998.spring.aop.annotation.MyBefore;
-import com.lsm1998.spring.aop.enums.Type;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
 /**
- * @作者：刘时明
- * @时间:2018/12/23-23:14
- * @说明：使用cglib API生成动态代理类
+ * @author zgy
+ * @data 2021/4/25 20:22
  */
+
+
 public class CglibInvocationHandler implements MethodInterceptor
 {
     @Override
@@ -42,34 +39,15 @@ public class CglibInvocationHandler implements MethodInterceptor
      */
     private void afterThrowing(Method method, Object[] args)
     {
-        if (method.isAnnotationPresent(MyAfterThrowing.class))
-        {
-            MyAfterThrowing afterThrowing = method.getAnnotation(MyAfterThrowing.class);
-            StringBuffer sb=new StringBuffer(afterThrowing.value());
-            if (sb.toString().startsWith("args(") && sb.toString().endsWith(")"))
-            {
-                sb.delete(0,5);
-                sb.delete(sb.length()-1,sb.length());
-                int index;
-                while ((index=sb.indexOf("#{"))!=-1)
-                {
-                    int lastIndex=sb.indexOf("}");
-                    Integer num=Integer.parseInt(sb.substring(index+2,lastIndex));
-                    sb.delete(index,lastIndex+1);
-                    sb.insert(index,args[num].toString());
-                }
-            } else
-            {
-                sb.append("事务结束");
-            }
-            if (afterThrowing.type() == Type.PRINT)
-            {
-                System.out.println("打印：" + sb.toString());
-            } else if (afterThrowing.type() == Type.LOGS)
-            {
-                System.out.println("日志：" + sb.toString());
-            }
-        }
+        int[] arr = new int[1000];
+
+        int num = 10000;
+
+        int arrIndex = num / 32;
+        int bitIndex = num % 32;
+
+        arr[arrIndex] = arr[arrIndex] | 1 << bitIndex;
+
     }
 
     /**
@@ -77,34 +55,7 @@ public class CglibInvocationHandler implements MethodInterceptor
      */
     private void after(Method method,Object[] args)
     {
-        if (method.isAnnotationPresent(MyAfter.class))
-        {
-            MyAfter after = method.getAnnotation(MyAfter.class);
-            StringBuffer sb=new StringBuffer(after.value());
-            if (sb.toString().startsWith("args(") && sb.toString().endsWith(")"))
-            {
-                sb.delete(0,5);
-                sb.delete(sb.length()-1,sb.length());
-                int index;
-                while ((index=sb.indexOf("#{"))!=-1)
-                {
-                    int lastIndex=sb.indexOf("}");
-                    Integer num=Integer.parseInt(sb.substring(index+2,lastIndex));
-                    sb.delete(index,lastIndex+1);
-                    sb.insert(index,args[num].toString());
-                }
-            } else
-            {
-                sb.append("事务结束");
-            }
-            if (after.type() == Type.PRINT)
-            {
-                System.out.println("打印：" + sb.toString());
-            } else if (after.type() == Type.LOGS)
-            {
-                System.out.println("日志：" + sb.toString());
-            }
-        }
+
     }
 
     /**
@@ -112,33 +63,6 @@ public class CglibInvocationHandler implements MethodInterceptor
      */
     private void before(Method method,Object[] args)
     {
-        if (method.isAnnotationPresent(MyBefore.class))
-        {
-            MyBefore before = method.getAnnotation(MyBefore.class);
-            StringBuffer sb=new StringBuffer(before.value());
-            if (sb.toString().startsWith("args(") && sb.toString().endsWith(")"))
-            {
-                sb.delete(0,5);
-                sb.delete(sb.length()-1,sb.length());
-                int index;
-                while ((index=sb.indexOf("#{"))!=-1)
-                {
-                    int lastIndex=sb.indexOf("}");
-                    Integer num=Integer.parseInt(sb.substring(index+2,lastIndex));
-                    sb.delete(index,lastIndex+1);
-                    sb.insert(index,args[num].toString());
-                }
-            } else
-            {
-                sb.append("事务结束");
-            }
-            if (before.type() == Type.PRINT)
-            {
-                System.out.println("打印：" + sb.toString());
-            } else if (before.type() == Type.LOGS)
-            {
-                System.out.println("日志：" + sb.toString());
-            }
-        }
+
     }
 }

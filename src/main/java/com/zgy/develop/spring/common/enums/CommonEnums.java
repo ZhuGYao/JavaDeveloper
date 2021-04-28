@@ -7,7 +7,9 @@ package com.zgy.develop.spring.common.enums;
 
 public enum  CommonEnums {
 
-    SEPARATE("/", "分隔符");
+    SEPARATE("/", "分隔符"),
+    SPOT(".", "点"),
+    CLASS_SUFFIX(".class", "后缀"),;
 
     public final String value;
     public final String type;

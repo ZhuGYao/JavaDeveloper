@@ -1,4 +1,4 @@
-package com.zgy.develop.spring.core;
+package com.zgy.develop.spring.beans;
 
 import com.zgy.develop.spring.annotation.CustomAutowired;
 import com.zgy.develop.spring.annotation.CustomComponentScan;
@@ -8,9 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Map;
 import java.util.Properties;

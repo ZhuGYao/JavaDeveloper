@@ -8,7 +8,7 @@ import net.sf.cglib.proxy.Enhancer;
  */
 
 
-public abstract class MyAspectInstanceFactory
+public abstract class CustomAspectInstanceFactory
 {
     public static <T> T getAspectInstance(T instance)
     {
