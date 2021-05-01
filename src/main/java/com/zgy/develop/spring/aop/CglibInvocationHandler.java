@@ -39,14 +39,6 @@ public class CglibInvocationHandler implements MethodInterceptor
      */
     private void afterThrowing(Method method, Object[] args)
     {
-        int[] arr = new int[1000];
-
-        int num = 10000;
-
-        int arrIndex = num / 32;
-        int bitIndex = num % 32;
-
-        arr[arrIndex] = arr[arrIndex] | 1 << bitIndex;
 
     }
 

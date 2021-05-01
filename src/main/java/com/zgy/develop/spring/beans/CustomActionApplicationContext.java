@@ -41,6 +41,7 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 
     /**
      * 递归得到所有的class
+     *
      * @param basePackage
      * @throws FileNotFoundException
      */
@@ -77,22 +78,18 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 
     }
 
-    private void GenerationProxy(String key, Object bean)
-    {
+    private void GenerationProxy(String key, Object bean) {
         Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
         Field[] fields = bean.getClass().getDeclaredFields();
-        try
-        {
+        try {
             // 对象的属性赋给代理对象
-            for (Field f : fields)
-            {
+            for (Field f : fields) {
                 f.setAccessible(true);
                 Field temp = bean.getClass().getDeclaredField(f.getName());
                 temp.setAccessible(true);
                 f.set(proxy, temp.get(bean));
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         proxyMap.put(key, proxy);

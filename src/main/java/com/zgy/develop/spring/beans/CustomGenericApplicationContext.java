@@ -42,7 +42,7 @@ public class CustomGenericApplicationContext extends CustomActionApplicationCont
             // 注入代理组件
             super.autowiredProxy();
         } else {
-            System.out.println("AOP相关功能未开启");
+            log.info("未开启AOP功能");
         }
     }
 
