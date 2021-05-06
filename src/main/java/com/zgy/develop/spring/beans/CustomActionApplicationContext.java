@@ -2,6 +2,8 @@ package com.zgy.develop.spring.beans;
 
 import com.zgy.develop.spring.annotation.CustomAutowired;
 import com.zgy.develop.spring.annotation.CustomComponentScan;
+import com.zgy.develop.spring.annotation.CustomMapper;
+import com.zgy.develop.spring.annotation.CustomService;
 import com.zgy.develop.spring.aop.CustomAspectInstanceFactory;
 import com.zgy.develop.spring.common.enums.CommonEnums;
 import lombok.extern.slf4j.Slf4j;
@@ -69,8 +71,19 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
     }
 
     @Override
-    protected void autowired(CustomBeanFactory beanFactory) {
+    protected void autowired(CustomBeanFactory beanFactory) throws ClassNotFoundException {
+        for (String className : classNames) {
+            Class clazz = Class.forName(className);
 
+            // 判断是否需要ioc容器管理
+            if (clazz.isAnnotationPresent(CustomService.class)) {
+
+
+            } else if (clazz.isAnnotationPresent(CustomMapper.class)) {
+
+
+            }
+        }
     }
 
     @Override
