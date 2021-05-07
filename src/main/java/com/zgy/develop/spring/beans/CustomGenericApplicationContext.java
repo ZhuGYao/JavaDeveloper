@@ -21,7 +21,7 @@ public class CustomGenericApplicationContext extends CustomActionApplicationCont
      *
      * @param clazz
      */
-    protected void loadApplicationContext(Class<?> clazz, Properties properties) throws FileNotFoundException {
+    protected void loadApplicationContext(Class<?> clazz, Properties properties) throws Exception {
         // 检验配置类
         if (!validateConfig(clazz)) {
             log.error("{}不是一个Spring配置类", clazz.getName());

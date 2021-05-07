@@ -1,9 +1,6 @@
 package com.zgy.develop.spring.beans;
 
-import com.zgy.develop.spring.annotation.CustomAutowired;
-import com.zgy.develop.spring.annotation.CustomComponentScan;
-import com.zgy.develop.spring.annotation.CustomMapper;
-import com.zgy.develop.spring.annotation.CustomService;
+import com.zgy.develop.spring.annotation.*;
 import com.zgy.develop.spring.aop.CustomAspectInstanceFactory;
 import com.zgy.develop.spring.common.enums.CommonEnums;
 import lombok.extern.slf4j.Slf4j;
@@ -71,47 +68,76 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
     }
 
     @Override
-    protected void autowired(CustomBeanFactory beanFactory) throws ClassNotFoundException {
+    protected void autowired(CustomBeanFactory beanFactory) throws Exception {
         for (String className : classNames) {
             Class clazz = Class.forName(className);
 
+            String beanName = null;
             // 判断是否需要ioc容器管理
             if (clazz.isAnnotationPresent(CustomService.class)) {
-
-
+                CustomService service = (CustomService) clazz.getAnnotation(CustomService.class);
+                beanName = service.name();
             } else if (clazz.isAnnotationPresent(CustomMapper.class)) {
-
-
+                CustomMapper mapper = (CustomMapper) clazz.getAnnotation(CustomMapper.class);
+                beanName = mapper.name();
             }
+
+            // 没有特别指定BeanName
+            if (beanName == null) {
+                // 根据类名自动生成
+                beanName = lowerFirst(clazz.getSimpleName().replace(".class", ""));
+            }
+            // 已有重复的BeanName，抛出异常
+            if (iocMap.containsKey(beanName)) {
+                throw new Exception("bean " + beanName + " already exists");
+            }
+            // 放进IOC容器
+            iocMap.put(beanName, clazz.newInstance());
         }
     }
 
     @Override
     protected void loadAspect() {
 
+        for (String key : iocMap.keySet()) {
+            Object bean = iocMap.get(key);
+            if (bean.getClass().isAnnotationPresent(CustomAspect.class)) {
+                // 创建代理类
+                GenerationProxy(key, bean);
+            }
+        }
     }
 
+    /**
+     * 生产代理类
+     * @param key
+     * @param bean
+     */
     private void GenerationProxy(String key, Object bean) {
+        // 获取代理
         Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
+
         Field[] fields = bean.getClass().getDeclaredFields();
         try {
             // 对象的属性赋给代理对象
             for (Field f : fields) {
                 f.setAccessible(true);
-                Field temp = bean.getClass().getDeclaredField(f.getName());
-                temp.setAccessible(true);
-                f.set(proxy, temp.get(bean));
+                f.set(proxy, f.get(bean));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("获取代理失败:{}",e);
         }
         proxyMap.put(key, proxy);
     }
 
+    /**
+     * 注入
+     */
     protected void autowiredProxy() {
         for (Object bean : iocMap.values()) {
             Field[] fields = bean.getClass().getDeclaredFields();
             for (Field f : fields) {
+                // 是否需要自动注入
                 if (f.isAnnotationPresent(CustomAutowired.class)) {
                     autowiredProxy(f, bean);
                 }
@@ -119,6 +145,11 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
         }
     }
 
+    /**
+     * 注入对象
+     * @param f
+     * @param bean
+     */
     private void autowiredProxy(Field f, Object bean) {
         Class<?> clazz = f.getType();
 
@@ -146,5 +177,16 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * 将类名首字符变为小写
+     * @param str 类名
+     * @return
+     */
+    private String lowerFirst(String str) {
+        char[] chars = str.toCharArray();
+        chars[0] += 32;
+        return new String(chars);
     }
 }

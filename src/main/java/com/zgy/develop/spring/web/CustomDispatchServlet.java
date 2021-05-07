@@ -18,22 +18,19 @@ public class CustomDispatchServlet extends HttpServlet {
     private Class<?> clazz;
     private Properties properties;
 
-    public CustomDispatchServlet(Class<?> clazz, Properties properties)
-    {
+    public CustomDispatchServlet(Class<?> clazz, Properties properties) {
         this.clazz = clazz;
         this.properties = properties;
     }
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doPost(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-    {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
 }

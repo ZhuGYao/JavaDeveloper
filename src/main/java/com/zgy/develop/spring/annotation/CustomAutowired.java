@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 自动注入
  * @author zgy
  * @data 2021/4/26 22:45
  */

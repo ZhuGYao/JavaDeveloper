@@ -31,7 +31,7 @@ public abstract class CustomAbstractBeanFactory {
      * 装配组件
      * @param beanFactory
      */
-    protected abstract void autowired(CustomBeanFactory beanFactory) throws ClassNotFoundException;
+    protected abstract void autowired(CustomBeanFactory beanFactory) throws Exception;
 
     /**
      * 加载切面类型的组件

@@ -12,7 +12,7 @@ import java.util.List;
  * @data 2021/5/7 0:22
  */
 
-public class ProxyChain {
+public class CustomProxyChain {
 
     // 目标类
     private final Class<?> targetClass;
@@ -29,7 +29,7 @@ public class ProxyChain {
     // 代理索引
     private int proxyIndex = 0;
 
-    public ProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, MethodProxy methodProxy, Object[] methodParams, List<IProxy> proxyList) {
+    public CustomProxyChain(Class<?> targetClass, Object targetObject, Method targetMethod, MethodProxy methodProxy, Object[] methodParams, List<IProxy> proxyList) {
         this.targetClass = targetClass;
         this.targetObject = targetObject;
         this.targetMethod = targetMethod;
