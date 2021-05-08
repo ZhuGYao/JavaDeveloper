@@ -117,6 +117,7 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
 //        Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
         Object proxy = "1";
         Field[] fields = bean.getClass().getDeclaredFields();
+//        CustomAspect customAspect = bean.getClass().getAnnotation(CustomAspect.class);
         try {
             // 对象的属性赋给代理对象
             for (Field f : fields) {
