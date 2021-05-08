@@ -1,5 +1,7 @@
 package com.zgy.develop.spring.proxy;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.lang.reflect.Method;
 
 /**
@@ -9,11 +11,40 @@ import java.lang.reflect.Method;
  * @data 2021/5/7 0:32
  */
 
+@Slf4j
 public class CustomAspectProxy implements IProxy{
 
     @Override
     public Object doProxy(CustomProxyChain proxyChain) throws Throwable {
-        return null;
+
+        Object result = null;
+        Method method = proxyChain.getTargetMethod();
+        Object[] params = proxyChain.getMethodParams();
+
+        // 开始
+        begin();
+        try {
+            // 判断
+            if (intercept(method, params)) {
+                // 前置方法
+                before(method, params);
+                // 继续调用
+                result = proxyChain.doProxyChain();
+                // 后置执行
+                after(method, params);
+            } else {
+                result = proxyChain.doProxyChain();
+            }
+        } catch (Exception e) {
+            log.error("proxy failure", e);
+            error(method, params, e);
+            throw e;
+        } finally {
+            // 结束
+            end();
+        }
+
+        return result;
     }
 
     /**

@@ -23,6 +23,7 @@ public class CustomProxyFactory {
     @SuppressWarnings("unchecked")
     public static <T> T createProxy(Class<?> targetClass, List<IProxy> proxyList) {
         // 代理方法, 每次调用目标方法时都会先创建一个 ProxyChain 对象, 然后调用该对象的 doProxyChain()方法.
-        return (T) Enhancer.create(targetClass, (MethodInterceptor) (targetObject, targetMethod, methodParams, methodProxy) -> new CustomProxyChain(targetClass, targetObject, targetMethod, methodProxy, methodParams, proxyList).doProxyChain());
+        return (T) Enhancer.create(targetClass, (MethodInterceptor) (targetObject, targetMethod, methodParams, methodProxy)
+                -> new CustomProxyChain(targetClass, targetObject, targetMethod, methodProxy, methodParams, proxyList).doProxyChain());
     }
 }

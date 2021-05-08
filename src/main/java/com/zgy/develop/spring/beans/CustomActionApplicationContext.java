@@ -1,7 +1,6 @@
 package com.zgy.develop.spring.beans;
 
 import com.zgy.develop.spring.annotation.*;
-import com.zgy.develop.spring.aop.CustomAspectInstanceFactory;
 import com.zgy.develop.spring.common.enums.CommonEnums;
 import lombok.extern.slf4j.Slf4j;
 
@@ -115,8 +114,8 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
      */
     private void GenerationProxy(String key, Object bean) {
         // 获取代理
-        Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
-
+//        Object proxy = CustomAspectInstanceFactory.getAspectInstance(bean);
+        Object proxy = "1";
         Field[] fields = bean.getClass().getDeclaredFields();
         try {
             // 对象的属性赋给代理对象
