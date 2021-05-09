@@ -110,7 +110,10 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
     }
 
     @Override
-    public T selectOne(Map<String, Object> mapCondition) {
+    public T selectOne(CustomExample customExample) {
+
+        CustomExample.CustomCriteria criteria = customExample.getCriteria();
+
         return null;
     }
 

@@ -1,5 +1,6 @@
 package com.zgy.develop.rbac.dao;
 
+import com.zgy.develop.jpa.base.CustomExample;
 import com.zgy.develop.jpa.base.MySQLBaseDao;
 import com.zgy.develop.rbac.pojo.User;
 
@@ -14,5 +15,14 @@ public class UserDao extends MySQLBaseDao<User> {
         return this.insert(user);
     }
 
+    public User selectOne(String name, String password) {
 
+        CustomExample customExample = new CustomExample(User.class);
+        CustomExample.CustomCriteria customCriteria = customExample.createCustomCriteria();
+        customCriteria.andEqualTo("name", name);
+        customCriteria.andEqualTo("password", password);
+
+
+        return null;
+    }
 }

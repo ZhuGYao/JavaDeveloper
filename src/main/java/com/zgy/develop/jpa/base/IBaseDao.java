@@ -47,10 +47,10 @@ public interface IBaseDao<T> {
 
     /**
      * 根据条件查询单条
-     * @param mapCondition
+     * @param customExample
      * @return
      */
-    T selectOne(Map<String, Object> mapCondition);
+    T selectOne(CustomExample customExample);
 
     /**
      * 查询全部
