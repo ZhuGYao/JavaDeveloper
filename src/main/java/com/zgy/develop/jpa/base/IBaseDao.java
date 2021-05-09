@@ -1,6 +1,7 @@
 package com.zgy.develop.jpa.base;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zgy
@@ -9,15 +10,51 @@ import java.util.List;
 
 public interface IBaseDao<T> {
 
+    /**
+     * 插入数据
+     * @param bean
+     * @return
+     */
     Integer insert(T bean);
 
+    /**
+     * 删除数据
+     * @param bean
+     * @return
+     */
     Integer delete(T bean);
 
+    /**
+     * 根据主键更新
+     * @param bean
+     * @return
+     */
     Integer updatePrimaryKey(T bean);
 
+    /**
+     * 根据主键更新,忽略空值
+     * @param bean
+     * @return
+     */
     Integer updatePrimaryKeySelective(T bean);
 
-    T selectOne(Integer id);
+    /**
+     * 根据主键查询
+     * @param id
+     * @return
+     */
+    T selectByPrimaryKey(Integer id);
 
+    /**
+     * 根据条件查询单条
+     * @param mapCondition
+     * @return
+     */
+    T selectOne(Map<String, Object> mapCondition);
+
+    /**
+     * 查询全部
+     * @return
+     */
     List<T> selectAll();
 }

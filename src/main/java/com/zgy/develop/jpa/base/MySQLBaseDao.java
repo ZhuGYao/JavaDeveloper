@@ -12,6 +12,7 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础MySQL Dao类
@@ -34,6 +35,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
     public Integer insert(T bean) {
 
         String table_name = beanClass.getName();
+        // 查看是否自定义表名
         Table table = beanClass.getAnnotation(Table.class);
         if (table != null) {
             table_name = table.value();
@@ -52,6 +54,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
         List<String> valueList = new ArrayList<>();
         for (int i = 0; i < fields.length; i++) {
             String column = fields[i].getName();
+            // 查看是否自定义列名
             Column annotation = fields[i].getAnnotation(Column.class);
             if (annotation != null) {
                 column = annotation.value();
@@ -69,7 +72,6 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
                 e.printStackTrace();
             }
         }
-
 
 
         sql.append(String.join(MarksEnum.COMMA.value, columnList))
@@ -103,7 +105,12 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
     }
 
     @Override
-    public T selectOne(Integer id) {
+    public T selectByPrimaryKey(Integer id) {
+        return null;
+    }
+
+    @Override
+    public T selectOne(Map<String, Object> mapCondition) {
         return null;
     }
 

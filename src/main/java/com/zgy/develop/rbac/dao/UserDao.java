@@ -1,6 +1,7 @@
-package com.zgy.develop.jpa.test;
+package com.zgy.develop.rbac.dao;
 
 import com.zgy.develop.jpa.base.MySQLBaseDao;
+import com.zgy.develop.rbac.pojo.User;
 
 /**
  * @author zgy
@@ -13,11 +14,5 @@ public class UserDao extends MySQLBaseDao<User> {
         return this.insert(user);
     }
 
-    public static void main(String[] args) {
-        User user = new User();
-        user.setName("ccc");
-//        user.setAge(18);
-        UserDao userDao = new UserDao();
-        userDao.add(user);
-    }
+
 }

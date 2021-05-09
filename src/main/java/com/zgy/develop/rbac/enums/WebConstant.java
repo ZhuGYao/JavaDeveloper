@@ -1,4 +1,4 @@
-package com.zgy.develop.rbac;
+package com.zgy.develop.rbac.enums;
 
 /**
  * 通用常量

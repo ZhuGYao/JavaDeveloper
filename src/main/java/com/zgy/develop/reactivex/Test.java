@@ -9,18 +9,18 @@ public class Test {
 
     public static void main(String[] args) {
 
-//        Observable.create(new ObservableOnSubscribe<String>() {
-//            @Override
-//            public void call(Observer<String> observer) {
-//                observer.onNext("1111");
-//            }
-//        }).subscribe(new Observer<String>() {
-//
-//            @Override
-//            public void onNext(String value) {
-//                System.out.println(value);
-//            }
-//        });
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void call(Observer<String> observer) {
+                observer.onNext("1111");
+            }
+        }).subscribe(new Observer<String>() {
+
+            @Override
+            public void onNext(String value) {
+                System.out.println(value);
+            }
+        });
 
         // 父
 //        Observable<String> stringObservable = Observable.create(new ObservableOnSubscribe<String>() {

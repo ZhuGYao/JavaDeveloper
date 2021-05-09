@@ -1,9 +1,25 @@
 package com.zgy.develop.rbac;
 
+import com.zgy.develop.annotation.ioc.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 /**
+ * 登录拦截
  * @author zgy
  * @data 2021/5/9 18:45
  */
 
-public class MvcConfig {
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**");
+    }
 }

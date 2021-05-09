@@ -10,7 +10,7 @@ import java.sql.*;
 public class DBConnection {
 
     private static String driver ="com.mysql.cj.jdbc.Driver";
-    private static String url ="jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false&socketTimeout=300000&connectTimeout=30000";
+    private static String url ="jdbc:mysql://localhost:3306/rbac?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&failOverReadOnly=false&socketTimeout=300000&connectTimeout=30000";
     private static String user = "root";
     private static String password ="root";
 
