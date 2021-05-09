@@ -4,6 +4,8 @@ import com.zgy.develop.annotation.db.Column;
 import com.zgy.develop.annotation.db.Table;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,7 @@ public class CustomExample {
 
     public CustomExample(Class<?> entityClass) {
         this.entityClass = entityClass;
+        propertyMap = new HashMap<>();
         initTableAndProperty(entityClass);
     }
 
@@ -59,13 +62,13 @@ public class CustomExample {
 
     }
 
-
     /**
      * 创建
      * @return
      */
     public CustomCriteria createCustomCriteria() {
         CustomCriteria customCriteria = new CustomCriteria(propertyMap);
+        this.criteria = customCriteria;
         return customCriteria;
     }
 
@@ -82,12 +85,13 @@ public class CustomExample {
      */
     public static class CustomCriteria {
 
-        protected Map<String, String> propertyMap;
+        private Map<String, String> propertyMap;
 
-        protected List<CustomCriterion> criteria;
+        private List<CustomCriterion> criteria;
 
         public CustomCriteria(Map<String, String> propertyMap) {
             this.propertyMap = propertyMap;
+            criteria = new ArrayList<>();
         }
 
         public CustomCriteria andEqualTo(String property, Object value) {
@@ -118,6 +122,10 @@ public class CustomExample {
             }
             return propertyMap.get(property);
         }
+
+        public List<CustomCriterion> getCriteria() {
+            return criteria;
+        }
     }
 
 
@@ -133,6 +141,14 @@ public class CustomExample {
         public CustomCriterion(String condition, Object value) {
             this.condition = condition;
             this.value = value;
+        }
+
+        public String getCondition() {
+            return condition;
+        }
+
+        public Object getValue() {
+            return value;
         }
     }
 }

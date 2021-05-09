@@ -7,6 +7,7 @@ package com.zgy.develop.common.enums;
 
 public enum MySQLKeywordEnum {
     SELECT(" SELECT "),
+    FROM(" from "),
     WHERE(" WHERE "),
     OR(" OR "),
     AND(" AND "),
@@ -15,7 +16,8 @@ public enum MySQLKeywordEnum {
     UPDATE(" UPDATE "),
     DELETE(" DELETE "),
     INTO(" INTO "),
-    VALUES(" VALUES ");
+    VALUES(" VALUES "),
+    PLACE_IDENTITY(" 1 = 1 ");
 
     public final String value;
 

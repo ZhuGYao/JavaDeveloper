@@ -7,6 +7,7 @@ package com.zgy.develop.common.enums;
 
 public enum MarksEnum {
 
+    ALL_PROPERTY(" * "),
     SPACE(" "),
     COMMA(" , "),
     LEFT_BRACKET(" ( "),

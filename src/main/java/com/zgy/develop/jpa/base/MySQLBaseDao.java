@@ -34,11 +34,11 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
     @Override
     public Integer insert(T bean) {
 
-        String table_name = beanClass.getName();
+        String tableName = beanClass.getName();
         // 查看是否自定义表名
         Table table = beanClass.getAnnotation(Table.class);
         if (table != null) {
-            table_name = table.value();
+            tableName = table.value();
         }
 
         Field[] fields = beanClass.getDeclaredFields();
@@ -47,7 +47,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
 
         sql.append(MySQLKeywordEnum.INSERT.value)
                 .append(MySQLKeywordEnum.INTO.value)
-                .append(table_name)
+                .append(tableName)
                 .append(MarksEnum.LEFT_BRACKET.value);
 
         List<String> columnList = new ArrayList<>();
@@ -72,7 +72,6 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
                 e.printStackTrace();
             }
         }
-
 
         sql.append(String.join(MarksEnum.COMMA.value, columnList))
                 .append(MarksEnum.RIGHT_BRACKET.value)
@@ -113,7 +112,27 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
     public T selectOne(CustomExample customExample) {
 
         CustomExample.CustomCriteria criteria = customExample.getCriteria();
+        String tableName = customExample.getTableName();
+        List<CustomExample.CustomCriterion> criterions = criteria.getCriteria();
 
+        StringBuilder sql = new StringBuilder();
+
+        sql.append(MySQLKeywordEnum.SELECT.value)
+                .append(MarksEnum.ALL_PROPERTY.value)
+                .append(MySQLKeywordEnum.FROM.value)
+                .append(tableName)
+                .append(MySQLKeywordEnum.WHERE.value);
+
+        for (CustomExample.CustomCriterion criterion : criterions) {
+            String condition = criterion.getCondition();
+            Object value = criterion.getValue();
+            sql.append(condition).append(value).append(MySQLKeywordEnum.AND.value);
+        }
+
+        sql.append(MySQLKeywordEnum.PLACE_IDENTITY);
+        sql.append(MarksEnum.SEMICOLON.value);
+
+        System.out.println(sql.toString());
         return null;
     }
 

@@ -22,7 +22,12 @@ public class UserDao extends MySQLBaseDao<User> {
         customCriteria.andEqualTo("name", name);
         customCriteria.andEqualTo("password", password);
 
-
+        this.selectOne(customExample);
         return null;
+    }
+
+    public static void main(String[] args) {
+        UserDao userDao = new UserDao();
+        userDao.selectOne("123", "123");
     }
 }
