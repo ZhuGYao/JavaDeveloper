@@ -6,21 +6,27 @@ import com.zgy.develop.common.enums.MarksEnum;
 import com.zgy.develop.common.enums.MySQLKeywordEnum;
 import com.zgy.develop.pool.CustomDBPool;
 import com.zgy.develop.pool.DBConnection;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 基础MySQL Dao类
+ *
  * @author zgy
  * @data 2021/4/15 14:46
  */
 
-public class MySQLBaseDao<T> implements IBaseDao<T>{
+@Slf4j
+public class MySQLBaseDao<T> implements IBaseDao<T> {
 
     private CustomDBPool customDBPool = new CustomDBPool(10);
     //泛型参数的Class对象
@@ -81,11 +87,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
                 .append(MarksEnum.RIGHT_BRACKET.value)
                 .append(MarksEnum.SEMICOLON.value);
 
-        System.out.println(sql.toString());
-        Connection connection = customDBPool.getConnection();
-        DBConnection.executeInsert(connection, sql.toString());
-        customDBPool.releaseConnection(connection);
-        return 1;
+        return executeInsert(sql.toString());
     }
 
     @Override
@@ -126,18 +128,48 @@ public class MySQLBaseDao<T> implements IBaseDao<T>{
         for (CustomExample.CustomCriterion criterion : criterions) {
             String condition = criterion.getCondition();
             Object value = criterion.getValue();
-            sql.append(condition).append(value).append(MySQLKeywordEnum.AND.value);
+            sql.append(condition)
+                    .append(MarksEnum.QUOTATION.value)
+                    .append(value)
+                    .append(MarksEnum.QUOTATION.value)
+                    .append(MySQLKeywordEnum.AND.value);
         }
 
-        sql.append(MySQLKeywordEnum.PLACE_IDENTITY);
+        sql.append(MySQLKeywordEnum.PLACE_IDENTITY.value);
         sql.append(MarksEnum.SEMICOLON.value);
 
-        System.out.println(sql.toString());
-        return null;
+        List list = executeQuery(sql.toString());
+        return (T) list.get(0);
     }
 
     @Override
     public List<T> selectAll() {
         return null;
+    }
+
+    /**
+     * 公用更新插入
+     * @param sql
+     * @return
+     */
+    private int executeInsert(String sql) {
+        log.info("executeInsert:{}", sql);
+        Connection connection = customDBPool.getConnection();
+        int count = DBConnection.executeInsert(connection, sql);
+        customDBPool.releaseConnection(connection);
+        return count;
+    }
+
+    /**
+     * 公用查询
+     * @param sql
+     * @return
+     */
+    private List executeQuery(String sql) {
+        log.info("executeQuery:{}", sql);
+        Connection connection = customDBPool.getConnection();
+        List list = DBConnection.executeQuery(connection, sql, beanClass);
+        customDBPool.releaseConnection(connection);
+        return list;
     }
 }

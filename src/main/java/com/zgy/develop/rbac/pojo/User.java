@@ -1,5 +1,6 @@
 package com.zgy.develop.rbac.pojo;
 
+import com.zgy.develop.annotation.db.Column;
 import com.zgy.develop.annotation.db.Table;
 
 import java.util.Date;
@@ -18,8 +19,10 @@ public class User {
 
     private String password;
 
+    @Column("create_time")
     private Date createTime;
 
+    @Column("update_time")
     private Date updateTime;
 
     private Integer deleted;

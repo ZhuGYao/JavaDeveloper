@@ -1,6 +1,12 @@
 package com.zgy.develop.pool;
 
+import com.zgy.develop.annotation.db.Column;
+
+import java.lang.reflect.Field;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zgy
@@ -55,5 +61,70 @@ public class DBConnection {
 
         }
         return count;
+    }
+
+    /**
+     * 查询数据
+     * @param connection
+     * @param sql
+     * @return
+     */
+    public static List executeQuery(Connection connection, String sql, Class clazz) {
+        Statement statement = null;
+        List list = new ArrayList();
+        try {
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            list = getListResult(resultSet, clazz);
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return list;
+    }
+
+    private static  <T> List<T> getListResult(ResultSet resultSet, Class beanClass) throws IllegalAccessException, InstantiationException, SQLException {
+
+        List<T> list = new ArrayList<>();
+        if (resultSet != null) {
+            Field[] fields = beanClass.getDeclaredFields();
+            while (resultSet.next()) {
+                T t = (T) beanClass.newInstance();
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    Column annotation = field.getAnnotation(Column.class);
+                    String dbFiledName = field.getName();
+                    if (annotation != null && !"".equals(annotation.value())) {
+                        dbFiledName = annotation.value();
+                    }
+                    if (field.getType().getSimpleName().equalsIgnoreCase(String.class.getSimpleName())) {
+                        field.set(t, resultSet.getString(dbFiledName));
+                    } else if (field.getType().getSimpleName().equals(int.class.getSimpleName()) ||
+                            field.getType().getSimpleName().equals(Integer.class.getSimpleName())) {
+                        field.set(t, resultSet.getInt(dbFiledName));
+                    } else if (field.getType().getSimpleName().equalsIgnoreCase(long.class.getSimpleName())) {
+                        field.set(t, resultSet.getLong(dbFiledName));
+                    } else if (field.getType().getSimpleName().equalsIgnoreCase(Date.class.getSimpleName())) {
+                        field.set(t, resultSet.getDate(dbFiledName));
+                    }
+                }
+                list.add(t);
+            }
+        }
+
+        return list;
     }
 }
