@@ -43,7 +43,7 @@ public interface IBaseDao<T> {
      * @param id
      * @return
      */
-    T selectByPrimaryKey(Integer id);
+    T selectByPrimaryKey(Long id);
 
     /**
      * 根据条件查询单条

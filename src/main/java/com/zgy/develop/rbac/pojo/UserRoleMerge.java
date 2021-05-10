@@ -16,8 +16,8 @@ public class UserRoleMerge {
     @Column("role_id")
     private Long roleId;
 
-    @Column("permission_id")
-    private Long permissionId;
+    @Column("user_id")
+    private Long userId;
 
     public Long getId() {
         return id;
@@ -35,11 +35,11 @@ public class UserRoleMerge {
         this.roleId = roleId;
     }
 
-    public Long getPermissionId() {
-        return permissionId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setPermissionId(Long permissionId) {
-        this.permissionId = permissionId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

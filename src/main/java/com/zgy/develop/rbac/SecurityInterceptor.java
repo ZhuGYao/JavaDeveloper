@@ -9,6 +9,7 @@ import com.zgy.develop.rbac.enums.UserType;
 import com.zgy.develop.rbac.enums.WebConstant;
 import com.zgy.develop.rbac.exception.BusinessException;
 import com.zgy.develop.rbac.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * @author zgy
@@ -26,7 +28,10 @@ import java.lang.reflect.Method;
  */
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class SecurityInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    private HttpSession session;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -120,12 +125,13 @@ public class LoginInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             Class<?> controllerClazz = handlerMethod.getBeanType();
-            PermissionRequired controllerPermission = AnnotationUtils.findAnnotation(controllerClazz, PermissionRequired.class);
-            PermissionRequired methodPermission = AnnotationUtils.getAnnotation(method, PermissionRequired.class);
-            if (hasPermission(controllerPermission, user.getUserType()) && hasPermission(methodPermission, user.getUserType())) {
+
+            Set<String> userPermissionMethods = (Set<String>) session.getAttribute(WebConstant.USER_PERMISSIONS);
+            String currentRequestMethod = controllerClazz.getName() + "#" + method.getName();
+            // 如果拥有此权限
+            if (userPermissionMethods.contains(currentRequestMethod)) {
                 return;
             }
-
             // 权限不匹配
             throw new BusinessException(ExceptionCodeEnum.PERMISSION_DENY);
         }

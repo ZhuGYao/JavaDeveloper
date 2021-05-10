@@ -33,20 +33,21 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
     //泛型参数的Class对象
     private Class<T> beanClass;
 
+    private String tableName;
+
     public MySQLBaseDao() {
         // 得到泛型Class类对象
         beanClass = (Class) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-
-    @Override
-    public Integer insert(T bean) {
-
-        String tableName = beanClass.getName();
+        tableName = beanClass.getName();
         // 查看是否自定义表名
         Table table = beanClass.getAnnotation(Table.class);
         if (table != null) {
             tableName = table.value();
         }
+    }
+
+    @Override
+    public Integer insert(T bean) {
 
         Field[] fields = beanClass.getDeclaredFields();
 
@@ -107,8 +108,15 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
     }
 
     @Override
-    public T selectByPrimaryKey(Integer id) {
-        return null;
+    public T selectByPrimaryKey(Long id) {
+        // TODO 暂时默认主键为ID
+        StringBuilder sql = getCommonSelect();
+        sql.append("id = ")
+                .append(id)
+                .append(MarksEnum.SEMICOLON.value);
+        List list = executeQuery(sql.toString());
+
+        return list != null && list.size() > 0 ? (T) list.get(0) : null;
     }
 
     @Override
@@ -136,16 +144,10 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
      */
     private List<T> selectByCustomExample(CustomExample customExample) {
         CustomExample.CustomCriteria criteria = customExample.getCriteria();
-        String tableName = customExample.getTableName();
         List<CustomExample.CustomCriterion> criterions = criteria.getCriteria();
 
-        StringBuilder sql = new StringBuilder();
-
-        sql.append(MySQLKeywordEnum.SELECT.value)
-                .append(MarksEnum.ALL_PROPERTY.value)
-                .append(MySQLKeywordEnum.FROM.value)
-                .append(tableName)
-                .append(MySQLKeywordEnum.WHERE.value);
+        // 获取公共查取头部
+        StringBuilder sql = getCommonSelect();
 
         for (CustomExample.CustomCriterion criterion : criterions) {
             String condition = criterion.getCondition();
@@ -160,6 +162,20 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
 
         List list = executeQuery(sql.toString());
         return list;
+    }
+
+    /**
+     * 公共查询头 TODO 可选查询字段
+     * @return
+     */
+    private StringBuilder getCommonSelect() {
+        StringBuilder sql = new StringBuilder();
+        sql.append(MySQLKeywordEnum.SELECT.value)
+                .append(MarksEnum.ALL_PROPERTY.value)
+                .append(MySQLKeywordEnum.FROM.value)
+                .append(tableName)
+                .append(MySQLKeywordEnum.WHERE.value);
+        return sql;
     }
 
     /**
