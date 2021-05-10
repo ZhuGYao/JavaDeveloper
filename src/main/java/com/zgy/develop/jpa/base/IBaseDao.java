@@ -53,6 +53,13 @@ public interface IBaseDao<T> {
     T selectOne(CustomExample customExample);
 
     /**
+     * 根据条件查询多条
+     * @param customExample
+     * @return
+     */
+    List<T> selectList(CustomExample customExample);
+
+    /**
      * 查询全部
      * @return
      */

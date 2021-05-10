@@ -114,6 +114,27 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
     @Override
     public T selectOne(CustomExample customExample) {
 
+        List list = selectByCustomExample(customExample);
+
+        return list != null && list.size() > 0 ? (T) list.get(0) : null;
+    }
+
+    @Override
+    public List<T> selectList(CustomExample customExample) {
+        return selectByCustomExample(customExample);
+    }
+
+    @Override
+    public List<T> selectAll() {
+        return null;
+    }
+
+    /**
+     * 公用根据条件查询
+     * @param customExample
+     * @return
+     */
+    private List<T> selectByCustomExample(CustomExample customExample) {
         CustomExample.CustomCriteria criteria = customExample.getCriteria();
         String tableName = customExample.getTableName();
         List<CustomExample.CustomCriterion> criterions = criteria.getCriteria();
@@ -138,12 +159,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
         sql.append(MarksEnum.SEMICOLON.value);
 
         List list = executeQuery(sql.toString());
-        return (T) list.get(0);
-    }
-
-    @Override
-    public List<T> selectAll() {
-        return null;
+        return list;
     }
 
     /**
