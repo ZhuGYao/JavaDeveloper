@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * @data 2021/4/16 17:22
  */
 
-@Service
+@Component
 public class UserDao extends MySQLBaseDao<User> {
 
     public int add(User user) {
