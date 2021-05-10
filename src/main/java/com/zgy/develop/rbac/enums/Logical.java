@@ -6,4 +6,6 @@ package com.zgy.develop.rbac.enums;
  */
 
 public enum Logical {
+    AND,
+    OR;
 }

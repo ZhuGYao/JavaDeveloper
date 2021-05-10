@@ -27,6 +27,9 @@ public class User {
 
     private Integer deleted;
 
+    @Column("user_type")
+    private Integer userType;
+
     public Long getId() {
         return id;
     }
@@ -73,5 +76,13 @@ public class User {
 
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
+    }
+
+    public Integer getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Integer userType) {
+        this.userType = userType;
     }
 }

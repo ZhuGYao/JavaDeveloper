@@ -1,9 +1,12 @@
 package com.zgy.develop.rbac.test;
 
 import com.zgy.develop.annotation.rbac.LoginRequired;
+import com.zgy.develop.annotation.rbac.PermissionRequired;
 import com.zgy.develop.common.utils.Result;
 import com.zgy.develop.rbac.dao.UserDao;
 import com.zgy.develop.rbac.enums.ExceptionCodeEnum;
+import com.zgy.develop.rbac.enums.Logical;
+import com.zgy.develop.rbac.enums.UserType;
 import com.zgy.develop.rbac.enums.WebConstant;
 import com.zgy.develop.rbac.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +49,11 @@ public class UserController {
     @GetMapping("/needNotLogin")
     public Result<String> needNotLogin() {
         return Result.success("if you see this, you are logged in.");
+    }
+
+    @PermissionRequired(userType = {UserType.ADMIN, UserType.TEACHER}, logical = Logical.OR)
+    @GetMapping("/needPermission")
+    public Result<String> needPermission() {
+        return Result.success("if you see this, you has the permission.");
     }
 }
