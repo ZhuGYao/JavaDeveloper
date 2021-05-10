@@ -5,6 +5,7 @@ import com.zgy.develop.rbac.enums.ExceptionCodeEnum;
 import com.zgy.develop.rbac.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * 全局异常处理
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 
 @Slf4j
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     /**

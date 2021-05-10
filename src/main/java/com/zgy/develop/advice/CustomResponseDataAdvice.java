@@ -17,23 +17,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @data 2021/4/19 17:22
  */
 
-@RestControllerAdvice
-public class CustomResponseDataAdvice implements ResponseBodyAdvice<Object> {
-    @Override
-    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
-        // 标注了@CosmoController，且类及方法上都没有标注@IgnoreCosmo的方法才进行包装
-        return methodParameter.getDeclaringClass().isAnnotationPresent(CosmoController.class)
-                && !methodParameter.getDeclaringClass().isAnnotationPresent(IgnoreCosmo.class)
-                && !methodParameter.getMethod().isAnnotationPresent(IgnoreCosmo.class);
-    }
-
-    @Override
-    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-
-        // 避免嵌套包装
-        if (o instanceof CommonResultUtils) {
-            return o;
-        }
-        return CommonResultUtils.ok(o);
-    }
-}
+//@RestControllerAdvice
+//public class CustomResponseDataAdvice implements ResponseBodyAdvice<Object> {
+//    @Override
+//    public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
+//        // 标注了@CosmoController，且类及方法上都没有标注@IgnoreCosmo的方法才进行包装
+//        return methodParameter.getDeclaringClass().isAnnotationPresent(CosmoController.class)
+//                && !methodParameter.getDeclaringClass().isAnnotationPresent(IgnoreCosmo.class)
+//                && !methodParameter.getMethod().isAnnotationPresent(IgnoreCosmo.class);
+//    }
+//
+//    @Override
+//    public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
+//
+//        // 避免嵌套包装
+//        if (o instanceof CommonResultUtils) {
+//            return o;
+//        }
+//        return CommonResultUtils.ok(o);
+//    }
+//}

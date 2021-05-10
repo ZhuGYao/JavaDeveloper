@@ -14,6 +14,7 @@ public enum ExceptionCodeEnum {
 
     ERROR(-1, "网络错误"),
     SUCCESS(200, "成功"),
+    FAIL(400, "失败"),
     NEED_LOGIN(10001, "需要登录"),
     PERMISSION_DENY(10002, "权限不足");
 

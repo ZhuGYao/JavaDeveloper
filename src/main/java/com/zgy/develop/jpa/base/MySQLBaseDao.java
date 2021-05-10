@@ -7,6 +7,7 @@ import com.zgy.develop.common.enums.MySQLKeywordEnum;
 import com.zgy.develop.pool.CustomDBPool;
 import com.zgy.develop.pool.DBConnection;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -129,9 +130,7 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
             String condition = criterion.getCondition();
             Object value = criterion.getValue();
             sql.append(condition)
-                    .append(MarksEnum.QUOTATION.value)
                     .append(value)
-                    .append(MarksEnum.QUOTATION.value)
                     .append(MySQLKeywordEnum.AND.value);
         }
 

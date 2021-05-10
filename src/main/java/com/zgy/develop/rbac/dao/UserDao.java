@@ -3,12 +3,15 @@ package com.zgy.develop.rbac.dao;
 import com.zgy.develop.jpa.base.CustomExample;
 import com.zgy.develop.jpa.base.MySQLBaseDao;
 import com.zgy.develop.rbac.pojo.User;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zgy
  * @data 2021/4/16 17:22
  */
 
+@Service
 public class UserDao extends MySQLBaseDao<User> {
 
     public int add(User user) {
