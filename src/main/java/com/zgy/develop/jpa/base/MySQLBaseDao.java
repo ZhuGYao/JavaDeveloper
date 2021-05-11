@@ -14,6 +14,7 @@ import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,10 +72,17 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
             try {
                 fields[i].setAccessible(true);
                 Object o = fields[i].get(bean);
+
                 if (o == null) {
                     valueList.add(null);
                     continue;
                 }
+                // 日期类型特殊处理
+                if (fields[i].getType().getName().equals(Date.class.getName())) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    o = sdf.format(o);
+                }
+
                 valueList.add(MarksEnum.QUOTATION.value + o.toString() + MarksEnum.QUOTATION.value);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -134,7 +142,11 @@ public class MySQLBaseDao<T> implements IBaseDao<T> {
 
     @Override
     public List<T> selectAll() {
-        return null;
+        StringBuilder sql = getCommonSelect();
+        sql.append(MySQLKeywordEnum.PLACE_IDENTITY.value)
+                .append(MarksEnum.SEMICOLON.value);
+        List list = executeQuery(sql.toString());
+        return list;
     }
 
     /**

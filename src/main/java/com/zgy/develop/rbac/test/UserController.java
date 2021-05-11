@@ -8,8 +8,6 @@ import com.zgy.develop.rbac.dao.RolePermissionMergeDao;
 import com.zgy.develop.rbac.dao.UserDao;
 import com.zgy.develop.rbac.dao.UserRoleMergeDao;
 import com.zgy.develop.rbac.enums.ExceptionCodeEnum;
-import com.zgy.develop.rbac.enums.Logical;
-import com.zgy.develop.rbac.enums.UserType;
 import com.zgy.develop.rbac.enums.WebConstant;
 import com.zgy.develop.rbac.pojo.Permission;
 import com.zgy.develop.rbac.pojo.RolePermissionMerge;
@@ -22,6 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.LockSupport;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +76,12 @@ public class UserController {
     @GetMapping("/needPermission")
     public Result<String> needPermission() {
         return Result.success("if you see this, you has the permission.");
+    }
+
+    @PermissionRequired
+    @GetMapping("/needPermission1")
+    public Result<String> needPermission1() {
+        return Result.success("if you see this, you has the permission1.");
     }
 
     /**

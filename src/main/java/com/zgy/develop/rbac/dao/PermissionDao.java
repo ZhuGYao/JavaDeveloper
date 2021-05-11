@@ -26,4 +26,5 @@ public class PermissionDao extends MySQLBaseDao<Permission> {
         }
         return list;
     }
+
 }
