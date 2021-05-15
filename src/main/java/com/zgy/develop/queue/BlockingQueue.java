@@ -13,7 +13,7 @@ public class BlockingQueue<T> {
     private final LinkedList<T> queue = new LinkedList<>();
 
     private int MAX_SIZE = 1;
-    private int remainCount = 0;
+    private int count = 0;
 
     public BlockingQueue(int capacity) {
         if (capacity <= 0) {
@@ -29,7 +29,7 @@ public class BlockingQueue<T> {
             this.wait();
         }
         queue.addFirst(resource);
-        remainCount++;
+        count++;
         printMsg(resource, "被插入");
         this.notifyAll();
     }
@@ -41,7 +41,7 @@ public class BlockingQueue<T> {
             this.wait();
         }
         T resource = queue.removeLast();
-        remainCount--;
+        count--;
         printMsg(resource, "被取出");
         this.notifyAll();
         return resource;
@@ -49,6 +49,6 @@ public class BlockingQueue<T> {
 
     private void printMsg(T resource, String operation) throws InterruptedException {
         System.out.println(resource + operation);
-        System.out.println("队列容量：" + remainCount);
+        System.out.println("队列容量：" + count);
     }
 }
