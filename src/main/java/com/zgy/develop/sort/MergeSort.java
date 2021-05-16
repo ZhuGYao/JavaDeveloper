@@ -1,5 +1,8 @@
-package com.zgy.sort;
+package com.zgy.develop.sort;
 
+/**
+ * 归并排序
+ */
 public class MergeSort {
 
     public static void sort(int[] arr) {

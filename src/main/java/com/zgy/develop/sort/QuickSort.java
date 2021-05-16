@@ -1,5 +1,8 @@
-package com.zgy.sort;
+package com.zgy.develop.sort;
 
+/**
+ * 快速排序
+ */
 public class QuickSort {
 
     public static void sort(int[] arr) {

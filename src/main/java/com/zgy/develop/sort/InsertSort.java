@@ -1,5 +1,8 @@
-package com.zgy.sort;
+package com.zgy.develop.sort;
 
+/**
+ * 插入排序
+ */
 public class InsertSort {
 
     public static void sort(int[] arr) {
