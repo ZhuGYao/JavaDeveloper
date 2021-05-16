@@ -53,8 +53,8 @@ public class UserDao extends MySQLBaseDao<User> {
 //        任务取消
 //        任务即将被打断
 //        任务被打断
-        String result = futureTask.get();
-        System.out.println("任务执行结束，result====>" + result);
+//        String result = futureTask.get();
+//        System.out.println("任务执行结束，result====>" + result);
 
 
 
