@@ -21,7 +21,7 @@ public class HeapSort {
 
         // 循环此过程，是为了将大的数字不断放入尾部，然后构建一个有顺序的数组
         while (heapSize > 0) {
-            heapify(arr, 0, heapSize);
+            heapIfy(arr, 0, heapSize);
             swap(arr, 0, --heapSize);
         }
     }
@@ -34,7 +34,7 @@ public class HeapSort {
         }
     }
 
-    public static void heapify(int[] arr, int index, int heapSize) {
+    public static void heapIfy(int[] arr, int index, int heapSize) {
         int left = index*2+1;
         while (left < heapSize) {
             int largest = left + 1 < heapSize && arr[left + 1] > arr[left] ? left + 1 : left;
