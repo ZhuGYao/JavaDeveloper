@@ -9,16 +9,16 @@ public class MergeSort {
         start(arr, 0, arr.length - 1);
     }
 
-    public static void start(int[] arr, int i, int j) {
+    public static void start(int[] arr, int l, int r) {
 
-        if (i >= j) {
+        if (l >= r) {
             return;
         }
 
-        int mid = (j + i) / 2;
-        start(arr, i, mid);
-        start(arr, mid + 1, j);
-        merge(arr, i, mid, j);
+        int mid = (r + l) / 2;
+        start(arr, l, mid);
+        start(arr, mid + 1, r);
+        merge(arr, l, mid, r);
     }
 
     public static void merge(int[] arr, int l, int mid, int r) {
