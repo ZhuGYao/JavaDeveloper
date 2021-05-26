@@ -34,6 +34,11 @@ public abstract class CustomAbstractBeanFactory {
     protected abstract void autowired(CustomBeanFactory beanFactory) throws Exception;
 
     /**
+     * 注入属性
+     */
+    protected abstract  void inject() throws Exception;
+
+    /**
      * 加载切面类型的组件
      */
     protected abstract void loadAspect();

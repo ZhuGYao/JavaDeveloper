@@ -95,6 +95,34 @@ public class CustomActionApplicationContext extends CustomAbstractBeanFactory {
         }
     }
 
+    @Override
+    protected void inject() throws Exception {
+
+        // 遍历bean实例
+        for (String key : iocMap.keySet()) {
+            Class<?> clazz = iocMap.get(key).getClass();
+            // 是否被@CustomService或者@CustomMapper标记,如果没有标记不注入
+            if (!clazz.isAnnotationPresent(CustomService.class) && !clazz.isAnnotationPresent(CustomMapper.class)) {
+                continue;
+            }
+            // 通过反射获得所有成员变量
+            Field[] fields = clazz.getDeclaredFields();
+            // 遍历成员变量
+            for (Field field : fields) {
+                // 设置可以向private变量注入
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(CustomAutowired.class)) {
+                    String beanName = lowerFirst(field.getType().getSimpleName().replace(".class", ""));
+                    // IOC容器中找不到相应的Bean，抛出异常
+                    if (!iocMap.containsKey(beanName)) {
+                        throw new Exception("Bean " + beanName + " not exist");
+                    }
+                    // 注入实例
+                    field.set(iocMap.get(key), iocMap.get(beanName));
+                }
+            }
+        }
+    }
 
 
     @Override
