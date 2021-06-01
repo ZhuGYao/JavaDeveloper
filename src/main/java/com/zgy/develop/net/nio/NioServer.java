@@ -50,6 +50,8 @@ public class NioServer {
                 if (selectionKey.isAcceptable()) {
                     // 因为已经发生事件了，所以此时直接调用accept就可以
                     SocketChannel socketChannel = serverSocketChannel.accept();
+                    log.info("服务端收到一个新连接:{}",socketChannel.hashCode());
+                    socketChannel.configureBlocking(false);
                     // 注册到selector上，关注读事件
                     socketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
                 }
