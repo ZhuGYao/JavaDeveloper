@@ -38,10 +38,15 @@ public class QuickSort {
         return new int[]{less, more};
     }
 
-
     public static void swap(int[] arr, int i, int j) {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+
+    public static boolean isPowerOfFour(int n) {
+        if (n == 1) return true;
+        if (Math.abs(n) % 4 == 0) return true;
+        return false;
     }
 }
