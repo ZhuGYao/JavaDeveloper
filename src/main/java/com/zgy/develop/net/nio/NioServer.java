@@ -34,6 +34,7 @@ public class NioServer {
         // 循环等待
         for (;;) {
 
+            // 阻塞等待
             if (selector.select(1000) == 0) {
                 log.info("服务器等待1秒钟");
                 continue;
@@ -55,9 +56,17 @@ public class NioServer {
 
                 // 如果是SelectionKey.OP_READ事件
                 if (selectionKey.isReadable()) {
+                    // 根据key获取到对应Channel
                     SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+                    // 获取到提前绑定的ByteBuffer
+                    ByteBuffer byteBuffer = (ByteBuffer) selectionKey.attachment();
+                    socketChannel.read(byteBuffer);
+
+                    log.info("客户端发送数据为：{}", new String(byteBuffer.array()));
                 }
 
+                // 手动移除，防止重复接收
+                keyIterator.remove();
             }
 
         }
