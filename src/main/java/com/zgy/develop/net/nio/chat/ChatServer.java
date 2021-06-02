@@ -9,6 +9,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class ChatServer {
 
     private static final int PORT = 7777;
 
-    private Map<String, SocketChannel> map = null;
+    private Map<Integer, SocketChannel> clientMap;
 
     public ChatServer () {
 
@@ -40,6 +41,7 @@ public class ChatServer {
             listenSocketChannel.configureBlocking(false);
             // 注册
             listenSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            clientMap = new HashMap<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,10 +65,12 @@ public class ChatServer {
                         socketChannel.configureBlocking(false);
                         socketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
                         log.info("{}:上线了", socketChannel.getRemoteAddress());
+
+                        clientMap.put(socketChannel.hashCode(), socketChannel);
                     }
 
                     if (selectionKey.isReadable()) {
-
+                        readData(selectionKey);
                     }
 
                     // 移除,防止重复
@@ -94,6 +98,12 @@ public class ChatServer {
             if (count > 0) {
                 // 输出
                 log.info("{}:{}",socketChannel.getRemoteAddress(),new String(byteBuffer.array()));
+                // 循环发送
+                for (Integer key : clientMap.keySet()) {
+                    if (socketChannel.hashCode() != key) {
+                        clientMap.get(key).write(byteBuffer);
+                    }
+                }
             }
 
         } catch (IOException e) {
