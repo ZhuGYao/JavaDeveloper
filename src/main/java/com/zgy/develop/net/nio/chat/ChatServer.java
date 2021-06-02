@@ -5,13 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author zgy
@@ -27,8 +25,6 @@ public class ChatServer {
 
     private static final int PORT = 7777;
 
-    private Map<Integer, SocketChannel> clientMap;
-
     public ChatServer () {
 
         try {
@@ -41,7 +37,6 @@ public class ChatServer {
             listenSocketChannel.configureBlocking(false);
             // 注册
             listenSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-            clientMap = new HashMap<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,10 +58,8 @@ public class ChatServer {
                     if (selectionKey.isAcceptable()) {
                         SocketChannel socketChannel = listenSocketChannel.accept();
                         socketChannel.configureBlocking(false);
-                        socketChannel.register(selector, SelectionKey.OP_READ, ByteBuffer.allocate(1024));
+                        socketChannel.register(selector, SelectionKey.OP_READ);
                         log.info("{}:上线了", socketChannel.getRemoteAddress());
-
-                        clientMap.put(socketChannel.hashCode(), socketChannel);
                     }
 
                     if (selectionKey.isReadable()) {
@@ -78,7 +71,7 @@ public class ChatServer {
                 }
             }
         } catch (IOException e) {
-
+            e.printStackTrace();
         } finally {
 
         }
@@ -91,28 +84,38 @@ public class ChatServer {
             // 获取channel
             socketChannel = (SocketChannel) selectionKey.channel();
             // 获取buffer
-            ByteBuffer byteBuffer = (ByteBuffer) selectionKey.attachment();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
             // 读取
             int count = socketChannel.read(byteBuffer);
             // 如果读取到消息
             if (count > 0) {
+
+                String msg = new String(byteBuffer.array());
                 // 输出
-                log.info("{}:{}",socketChannel.getRemoteAddress(),new String(byteBuffer.array()));
-                // 循环发送
-                for (Integer key : clientMap.keySet()) {
-                    if (socketChannel.hashCode() != key) {
-                        clientMap.get(key).write(byteBuffer);
-                    }
-                }
+                log.info("{}:{}",socketChannel.getRemoteAddress(), msg);
+                sendAllUser(msg, socketChannel);
             }
 
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
     }
 
-    public static void main(String[] args) {
+    public void sendAllUser(String msg, SocketChannel self) throws IOException {
+        Set<SelectionKey> keys = selector.keys();
+        // 循环发送
+        for (SelectionKey key : keys) {
+            Channel channel = key.channel();
+            if (channel instanceof  SocketChannel && channel != self) {
+                SocketChannel socketChannel = (SocketChannel) channel;
+                socketChannel.write(ByteBuffer.wrap(msg.getBytes()));
+            }
+        }
+    }
 
+    public static void main(String[] args) {
+        ChatServer chatServer = new ChatServer();
+        chatServer.listen();
     }
 }
