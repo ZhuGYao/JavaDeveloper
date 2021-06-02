@@ -57,9 +57,11 @@ public class ChatServer {
                     SelectionKey selectionKey = iterator.next();
                     if (selectionKey.isAcceptable()) {
                         SocketChannel socketChannel = listenSocketChannel.accept();
+                        String msg = socketChannel.getRemoteAddress().toString().substring(1) + ":" + "上线了...";
                         socketChannel.configureBlocking(false);
                         socketChannel.register(selector, SelectionKey.OP_READ);
                         log.info("{}:上线了", socketChannel.getRemoteAddress());
+                        sendAllUser(msg, socketChannel);
                     }
 
                     if (selectionKey.isReadable()) {
@@ -97,7 +99,15 @@ public class ChatServer {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                String msg = socketChannel.getRemoteAddress().toString().substring(1) + ":" + "离线了...";
+                log.info(msg);
+                sendAllUser(msg, socketChannel);
+                socketChannel.close();
+                selectionKey.cancel();
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
         }
 
     }
