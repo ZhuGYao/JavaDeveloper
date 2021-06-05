@@ -89,6 +89,7 @@ public class ChatServer {
         }
     }
 
+    // 读取消息
     private void readData(SelectionKey selectionKey) {
 
         SocketChannel socketChannel = null;
@@ -122,6 +123,7 @@ public class ChatServer {
 
     }
 
+    // 发送消息
     public void sendAllUser(String msg, SocketChannel self) throws IOException {
         Set<SelectionKey> keys = slaveSelector.keys();
         // 循环发送
