@@ -94,6 +94,7 @@ public class ChatServer {
 
         SocketChannel socketChannel = null;
         try {
+            System.out.println("接收消息线程：" + Thread.currentThread().getName());
             // 获取channel
             socketChannel = (SocketChannel) selectionKey.channel();
             // 获取buffer
@@ -125,6 +126,7 @@ public class ChatServer {
 
     // 发送消息
     public void sendAllUser(String msg, SocketChannel self) throws IOException {
+        System.out.println("发送消息线程：" + Thread.currentThread().getName());
         Set<SelectionKey> keys = slaveSelector.keys();
         // 循环发送
         for (SelectionKey key : keys) {
