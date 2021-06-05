@@ -21,6 +21,8 @@ public class ChatServer {
 
     private Selector selector;
 
+    private Selector slaveSelector;
+
     private ServerSocketChannel listenSocketChannel;
 
     private static final int PORT = 7777;
@@ -30,6 +32,8 @@ public class ChatServer {
         try {
             // 初始化选择器
             selector = Selector.open();
+            // 初始化从选择器
+            slaveSelector = Selector.open();
             listenSocketChannel = ServerSocketChannel.open();
             // 绑定端口
             listenSocketChannel.socket().bind(new InetSocketAddress(PORT));
@@ -48,28 +52,34 @@ public class ChatServer {
 
             for (;;) {
 
-                if (selector.select(2000) <= 0) {
-                    continue;
+                if (selector.select(2000) > 0) {
+                    Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                    while (iterator.hasNext()) {
+                        SelectionKey selectionKey = iterator.next();
+                        if (selectionKey.isAcceptable()) {
+                            SocketChannel socketChannel = listenSocketChannel.accept();
+                            String msg = socketChannel.getRemoteAddress().toString().substring(1) + ":" + "上线了...";
+                            socketChannel.configureBlocking(false);
+                            // 将读请求都注册到从选择器上
+                            socketChannel.register(slaveSelector, SelectionKey.OP_READ);
+                            log.info("{}:上线了", socketChannel.getRemoteAddress());
+                            sendAllUser(msg, socketChannel);
+                        }
+                        // 移除,防止重复
+                        iterator.remove();
+                    }
                 }
 
-                Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-                while (iterator.hasNext()) {
-                    SelectionKey selectionKey = iterator.next();
-                    if (selectionKey.isAcceptable()) {
-                        SocketChannel socketChannel = listenSocketChannel.accept();
-                        String msg = socketChannel.getRemoteAddress().toString().substring(1) + ":" + "上线了...";
-                        socketChannel.configureBlocking(false);
-                        socketChannel.register(selector, SelectionKey.OP_READ);
-                        log.info("{}:上线了", socketChannel.getRemoteAddress());
-                        sendAllUser(msg, socketChannel);
+                if (slaveSelector.select(2000) > 0) {
+                    Iterator<SelectionKey> iterator = slaveSelector.selectedKeys().iterator();
+                    while (iterator.hasNext()) {
+                        SelectionKey selectionKey = iterator.next();
+                        if (selectionKey.isReadable()) {
+                            readData(selectionKey);
+                        }
+                        // 移除,防止重复
+                        iterator.remove();
                     }
-
-                    if (selectionKey.isReadable()) {
-                        readData(selectionKey);
-                    }
-
-                    // 移除,防止重复
-                    iterator.remove();
                 }
             }
         } catch (IOException e) {
@@ -113,7 +123,7 @@ public class ChatServer {
     }
 
     public void sendAllUser(String msg, SocketChannel self) throws IOException {
-        Set<SelectionKey> keys = selector.keys();
+        Set<SelectionKey> keys = slaveSelector.keys();
         // 循环发送
         for (SelectionKey key : keys) {
             Channel channel = key.channel();
