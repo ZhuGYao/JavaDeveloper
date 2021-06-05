@@ -20,7 +20,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf buf = (ByteBuf) msg;
-        log.info("{}:{}",ctx.channel().remoteAddress(), buf.toString(CharsetUtil.UTF_8));
+        log.info("客户端->{}:{}",ctx.channel().remoteAddress(), buf.toString(CharsetUtil.UTF_8));
     }
 
     @Override
