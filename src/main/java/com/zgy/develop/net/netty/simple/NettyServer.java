@@ -34,7 +34,7 @@ public class NettyServer {
                         ch.pipeline().addLast(null);
                     }
                 });
-        // 绑定端口
+        // 绑定端口同步
         ChannelFuture cf = bootstrap.bind(8888).sync();
         // 对关闭通道事件进行监听
         cf.channel().closeFuture().sync();
