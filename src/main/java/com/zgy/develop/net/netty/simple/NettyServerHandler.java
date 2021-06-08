@@ -18,14 +18,31 @@ import java.nio.charset.Charset;
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf) msg;
         log.info("客户端->{}:{}",ctx.channel().remoteAddress(), buf.toString(CharsetUtil.UTF_8));
+
+        /**
+         * 耗时长的业务
+         */
+//        Thread.sleep(10000);
+//        String str = "hello world1";
+//        ctx.writeAndFlush(Unpooled.copiedBuffer(str, CharsetUtil.UTF_8));
+        // 解决方案一
+        ctx.channel().eventLoop().execute(() -> {
+            try {
+                Thread.sleep(10000);
+                String str = "hello world1";
+                ctx.writeAndFlush(Unpooled.copiedBuffer(str, CharsetUtil.UTF_8));
+            } catch (Exception e) {
+                log.error("error : {}", e.getMessage());
+            }
+        });
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        String msg = "hello world";
+        String msg = "hello world2";
         ctx.writeAndFlush(Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8));
     }
 
