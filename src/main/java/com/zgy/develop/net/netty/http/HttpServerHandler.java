@@ -2,8 +2,8 @@ package com.zgy.develop.net.netty.http;
 
 /**
  * @author zgy
- * @data 2021/6/8 22:57
+ * @data 2021/6/8 22:59
  */
 
-public class TestServer {
+public class HttpServerHandler {
 }
