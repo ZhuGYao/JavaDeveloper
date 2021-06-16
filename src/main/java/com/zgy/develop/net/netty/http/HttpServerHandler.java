@@ -30,7 +30,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<HttpObject> {
             // 设置请求头
             httpResponse.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain");
             httpResponse.headers().set(HttpHeaderNames.CONTENT_LENGTH, byteBuf.readableBytes());
-
+            // 写回客户端
+            ctx.writeAndFlush(httpResponse);
         }
     }
 }
