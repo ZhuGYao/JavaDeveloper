@@ -25,7 +25,7 @@ public class HttpServer {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(null);
+                    .childHandler(new HttpServerInitializer());
             // 绑定端口同步
             ChannelFuture cf = bootstrap.bind(8888).sync();
 
