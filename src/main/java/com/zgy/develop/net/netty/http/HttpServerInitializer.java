@@ -15,12 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
-    protected void initChannel(SocketChannel socketChannel) throws Exception {
+    protected void initChannel(SocketChannel socketChannel) {
 
         // 向管道加入处理器
         ChannelPipeline pipeline = socketChannel.pipeline();
         // netty 提供的http编解码器
         pipeline.addLast("MyHttpServerCodec", new HttpServerCodec());
+        // 添加自定义handler
         pipeline.addLast("MyHttpServerHandler", new HttpServerHandler());
     }
 }
