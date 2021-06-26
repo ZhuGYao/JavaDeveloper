@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @data 2021/5/11 22:33
  */
 
-@Component
+//@Component
 public class PermissionMethodCollectionListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
