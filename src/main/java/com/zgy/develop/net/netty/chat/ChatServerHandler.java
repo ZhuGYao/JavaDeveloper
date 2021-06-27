@@ -18,7 +18,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
 
-        Channel channel = ctx.pipeline().channel();
+        Channel channel = ctx.channel();
         // 群发通知
         channelGroup.writeAndFlush("[客户端]：" + channel.remoteAddress() + "加入聊天室\n");
         // 新来的handler加入
@@ -28,9 +28,7 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
 
-        Channel channel = ctx.pipeline().channel();
-        // 删除handler
-        channelGroup.remove(channel);
+        Channel channel = ctx.channel();
         // 群发通知
         channelGroup.writeAndFlush("[客户端]：" + channel.remoteAddress() + "推出聊天室\n");
     }
@@ -38,16 +36,32 @@ public class ChatServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
+        Channel channel = ctx.channel();
+        System.out.println(channel.remoteAddress() + " 上线了...");
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 
+        Channel channel = ctx.channel();
+        System.out.println(channel.remoteAddress() + " 离线了...");
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 
+        Channel channel = ctx.channel();
+        channelGroup.forEach(ch -> {
+            if (ch != channel) {
+                ch.writeAndFlush("[客户]->" + channel.remoteAddress() + " : " + msg);
+            } else {
+                ch.writeAndFlush("[自己]->" + channel.remoteAddress() + " : " + msg);
+            }
+        });
+    }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.close();
     }
 }
